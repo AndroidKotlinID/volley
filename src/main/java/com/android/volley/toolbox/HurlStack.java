@@ -16,6 +16,7 @@
 
 package com.android.volley.toolbox;
 
+import android.support.annotation.VisibleForTesting;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Header;
 import com.android.volley.Request;
@@ -50,12 +51,12 @@ public class HurlStack extends BaseHttpStack {
     private final SSLSocketFactory mSslSocketFactory;
 
     public HurlStack() {
-        this(null);
+        this(/* urlRewriter = */ null);
     }
 
     /** @param urlRewriter Rewriter to use for request URLs */
     public HurlStack(UrlRewriter urlRewriter) {
-        this(urlRewriter, null);
+        this(urlRewriter, /* sslSocketFactory = */ null);
     }
 
     /**
@@ -106,7 +107,7 @@ public class HurlStack extends BaseHttpStack {
                 inputStreamFromConnection(connection));
     }
 
-    // VisibleForTesting
+    @VisibleForTesting
     static List<Header> convertHeaders(Map<String, List<String>> responseHeaders) {
         List<Header> headerList = new ArrayList<>(responseHeaders.size());
         for (Map.Entry<String, List<String>> entry : responseHeaders.entrySet()) {

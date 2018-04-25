@@ -17,6 +17,7 @@
 package com.android.volley;
 
 import android.os.Process;
+import android.support.annotation.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,6 +112,11 @@ public class CacheDispatcher extends Thread {
         // Get a request from the cache triage queue, blocking until
         // at least one is available.
         final Request<?> request = mCacheQueue.take();
+        processRequest(request);
+    }
+
+    @VisibleForTesting
+    void processRequest(final Request<?> request) throws InterruptedException {
         request.addMarker("cache-queue-take");
 
         // If the request has been canceled, don't bother dispatching it.
@@ -271,7 +277,7 @@ public class CacheDispatcher extends Thread {
                 // There is already a request in flight. Queue up.
                 List<Request<?>> stagedRequests = mWaitingRequests.get(cacheKey);
                 if (stagedRequests == null) {
-                    stagedRequests = new ArrayList<Request<?>>();
+                    stagedRequests = new ArrayList<>();
                 }
                 request.addMarker("waiting-for-response");
                 stagedRequests.add(request);

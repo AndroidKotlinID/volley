@@ -17,6 +17,7 @@
 package com.android.volley.toolbox;
 
 import android.os.SystemClock;
+import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import com.android.volley.Cache;
 import com.android.volley.Header;
@@ -49,8 +50,7 @@ import java.util.Map;
 public class DiskBasedCache implements Cache {
 
     /** Map of the Key, CacheHeader pairs */
-    private final Map<String, CacheHeader> mEntries =
-            new LinkedHashMap<String, CacheHeader>(16, .75f, true);
+    private final Map<String, CacheHeader> mEntries = new LinkedHashMap<>(16, .75f, true);
 
     /** Total amount of space currently used by the cache in bytes. */
     private long mTotalSize = 0;
@@ -482,7 +482,7 @@ public class DiskBasedCache implements Cache {
         }
     }
 
-    // VisibleForTesting
+    @VisibleForTesting
     static class CountingInputStream extends FilterInputStream {
         private final long length;
         private long bytesRead;
@@ -510,7 +510,7 @@ public class DiskBasedCache implements Cache {
             return result;
         }
 
-        // VisibleForTesting
+        @VisibleForTesting
         long bytesRead() {
             return bytesRead;
         }
